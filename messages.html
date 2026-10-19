@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roommate Match - Messages</title>
+  <style>
+    :root {
+      --primary-color: #0056b3;
+      --secondary-color: #28a745;
+      --bg-color: #f8f9fa;
+      --text-color: #212529;
+      --card-bg: #ffffff;
+      --border-color: #dee2e6;
+      --danger-color: #dc3545;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; }
+
+    header { background-color: #ffffff; border-bottom: 2px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+    .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem; }
+    .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); text-decoration: none; }
+    .nav-links { display: flex; list-style: none; gap: 1.5rem; }
+    .nav-links a { text-decoration: none; color: var(--text-color); font-weight: 600; padding: 0.5rem; border-radius: 4px; }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary-color); background-color: #e9ecef; }
+
+    .chat-container { max-width: 1000px; margin: 2rem auto; width: 90%; background: white; border: 1px solid var(--border-color); border-radius: 8px; display: grid; grid-template-columns: 260px 1fr; height: 550px; }
+
+    .chat-sidebar { border-right: 1px solid var(--border-color); background: #f1f3f5; overflow-y: auto; }
+    .chat-sidebar h2 { font-size: 1.1rem; padding: 1rem; border-bottom: 1px solid var(--border-color); background: white; }
+    .user-list { list-style: none; }
+    .user-item { padding: 1rem; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s; }
+    .user-item:hover, .user-item.active { background: #e9ecef; }
+    .user-item strong { display: block; font-size: 0.95rem; }
+
+    .chat-main { display: flex; flex-direction: column; }
+    .chat-header { padding: 1rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: #fff; }
+    .chat-messages { flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; background: #f8f9fa; }
+    
+    .message-bubble { max-width: 70%; padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.95rem; }
+    .message-bubble.sent { background: var(--primary-color); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+    .message-bubble.received { background: #e9ecef; color: var(--text-color); align-self: flex-start; border-bottom-left-radius: 2px; }
+
+    .chat-input-area { padding: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 0.5rem; background: white; }
+    .chat-input-area input { flex: 1; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px; }
+    
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.85rem; border-radius: 4px; border: none; cursor: pointer; }
+    .btn-danger { background-color: var(--danger-color); color: white; }
+    .btn-primary { background-color: var(--primary-color); color: white; }
+
+    footer { margin-top: auto; background-color: #343a40; color: white; text-align: center; padding: 1.5rem; font-size: 0.9rem; }
+
+    @media (max-width: 650px) {
+      .chat-container { grid-template-columns: 1fr; height: auto; }
+      .chat-sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="index.html" class="logo">Roommate Match</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="find-roommate.html">Find a Roommate</a></li>
+        <li><a href="messages.html" class="active">Messages</a></li>
+        <li><a href="profile.html">My Profile</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="chat-container">
+      <aside class="chat-sidebar">
+        <h2>Conversations</h2>
+        <ul class="user-list" id="userList">
+          <li class="user-item active" onclick="switchUser('Alex Chen')">
+            <strong>Alex Chen</strong>
+            <small>Hey, are you still looking?</small>
+          </li>
+          <li class="user-item" onclick="switchUser('Sarah Jenkins')">
+            <strong>Sarah Jenkins</strong>
+            <small>The budget sounds good!</small>
+          </li>
+        </ul>
+      </aside>
+
+      <section class="chat-main" aria-label="Chat Window">
+        <div class="chat-header">
+          <h3 id="chatWithTitle">Chat with Alex Chen</h3>
+          <button class="btn-sm btn-danger" id="blockUserBtn">Block User</button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+          <div class="message-bubble received">Hi there! I saw your profile and noticed we both want to live near North Campus.</div>
+          <div class="message-bubble sent">Hey Alex! Yes, I'm looking for a place starting next semester.</div>
+        </div>
+
+        <form class="chat-input-area" id="chatForm">
+          <input type="text" id="messageInput" placeholder="Type a respectful message..." required aria-label="Message text input">
+          <button type="submit" class="btn-sm btn-primary">Send</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Roommate Match. Designed for Student Compatibility &amp; Usability.</p>
+  </footer>
+
+  <script>
+    let activeUser = "Alex Chen";
+    const chatWithTitle = document.getElementById('chatWithTitle');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatForm = document.getElementById('chatForm');
+    const messageInput = document.getElementById('messageInput');
+    const blockUserBtn = document.getElementById('blockUserBtn');
+
+    // Parse URL parameter to pick user if redirected from "Find Roommate" page
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetUser = urlParams.get('user');
+
+    if (targetUser) {
+      activeUser = targetUser;
+      chatWithTitle.textContent = `Chat with ${activeUser}`;
+    }
+
+    function switchUser(name) {
+      activeUser = name;
+      chatWithTitle.textContent = `Chat with ${activeUser}`;
+      chatMessages.innerHTML = `<div class="message-bubble received">Hello! Starting conversation with ${activeUser}.</div>`;
+    }
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = messageInput.value.trim();
+      if (!text) return;
+
+      // Add sent message
+      const sentMsg = document.createElement('div');
+      sentMsg.className = 'message-bubble sent';
+      sentMsg.textContent = text;
+      chatMessages.appendChild(sentMsg);
+
+      messageInput.value = '';
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      // Simulated auto response
+      setTimeout(() => {
+        const replyMsg = document.createElement('div');
+        replyMsg.className = 'message-bubble received';
+        replyMsg.textContent = `Thanks for messaging! (Automated response from ${activeUser})`;
+        chatMessages.appendChild(replyMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 1200);
+    });
+
+    blockUserBtn.addEventListener('click', () => {
+      if (confirm(`Are you sure you want to block ${activeUser}? You will no longer receive messages from them.`)) {
+        alert(`${activeUser} has been blocked.`);
+        chatMessages.innerHTML = `<div class="message-bubble received">You have blocked this user.</div>`;
+      }
+    });
+  </script>
+</body>
+</html>

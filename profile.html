@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roommate Match - My Profile</title>
+  <style>
+    :root {
+      --primary-color: #0056b3;
+      --secondary-color: #28a745;
+      --bg-color: #f8f9fa;
+      --text-color: #212529;
+      --card-bg: #ffffff;
+      --border-color: #dee2e6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; }
+
+    header { background-color: #ffffff; border-bottom: 2px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+    .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem; }
+    .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); text-decoration: none; }
+    .nav-links { display: flex; list-style: none; gap: 1.5rem; }
+    .nav-links a { text-decoration: none; color: var(--text-color); font-weight: 600; padding: 0.5rem; border-radius: 4px; }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary-color); background-color: #e9ecef; }
+
+    .form-container { max-width: 700px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 8px; border: 1px solid var(--border-color); }
+    .form-container h1 { font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--primary-color); }
+    .form-container p { font-size: 0.95rem; color: #6c757d; margin-bottom: 1.5rem; }
+
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 0.3rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px; font-size: 1rem; }
+    .form-group small { color: #6c757d; font-size: 0.85rem; }
+
+    .alert { padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1rem; display: none; }
+    .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .alert-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+    .btn-submit { background-color: var(--secondary-color); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+    .btn-submit:hover { background-color: #218838; }
+
+    footer { margin-top: auto; background-color: #343a40; color: white; text-align: center; padding: 1.5rem; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="index.html" class="logo">Roommate Match</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="find-roommate.html">Find a Roommate</a></li>
+        <li><a href="messages.html">Messages</a></li>
+        <li><a href="profile.html" class="active">My Profile</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="form-container">
+      <h1>My Roommate Profile</h1>
+      <p>Complete your accommodation preferences and habits to help us show you accurate matches.</p>
+
+      <div class="alert alert-success" id="successAlert">Your profile preferences have been updated successfully!</div>
+      <div class="alert alert-danger" id="errorAlert">Please correct the errors in the form before submitting.</div>
+
+      <form id="profileForm" novalidate>
+        <div class="form-group">
+          <label for="fullName">Full Name *</label>
+          <input type="text" id="fullName" required aria-required="true">
+          <small id="nameError" style="color:var(--danger-color); display:none;">Please enter your full name.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="preferredLocation">Preferred Location *</label>
+          <select id="preferredLocation" required>
+            <option value="">-- Select Location --</option>
+            <option value="North Campus">North Campus</option>
+            <option value="South Campus">South Campus</option>
+            <option value="Downtown">Downtown</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="monthlyBudget">Monthly Budget ($) *</label>
+          <input type="number" id="monthlyBudget" min="100" max="5000" placeholder="e.g. 750" required>
+        </div>
+
+        <div class="form-group">
+          <label for="cleanliness">Cleanliness Habit</label>
+          <select id="cleanliness">
+            <option value="Very Neat">Very Neat</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Relaxed">Relaxed</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sleepSchedule">Sleep Schedule</label>
+          <select id="sleepSchedule">
+            <option value="Early Bird">Early Bird (Sleeps before 11 PM)</option>
+            <option value="Night Owl">Night Owl (Sleeps late)</option>
+            <option value="Flexible">Flexible</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="bio">Short Bio &amp; Lifestyle Details</label>
+          <textarea id="bio" rows="4" placeholder="Mention your study major, hobbies, or preferred housing type..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Save Profile Preferences</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Roommate Match. Designed for Student Compatibility &amp; Usability.</p>
+  </footer>
+
+  <script>
+    const profileForm = document.getElementById('profileForm');
+    const successAlert = document.getElementById('successAlert');
+    const errorAlert = document.getElementById('errorAlert');
+    const nameError = document.getElementById('nameError');
+
+    // Load saved profile data if available
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedData = JSON.parse(localStorage.getItem('userProfile'));
+      if (savedData) {
+        document.getElementById('fullName').value = savedData.fullName || '';
+        document.getElementById('preferredLocation').value = savedData.preferredLocation || '';
+        document.getElementById('monthlyBudget').value = savedData.monthlyBudget || '';
+        document.getElementById('cleanliness').value = savedData.cleanliness || 'Moderate';
+        document.getElementById('sleepSchedule').value = savedData.sleepSchedule || 'Flexible';
+        document.getElementById('bio').value = savedData.bio || '';
+      }
+    });
+
+    profileForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const fullName = document.getElementById('fullName').value.trim();
+      const preferredLocation = document.getElementById('preferredLocation').value;
+      const monthlyBudget = document.getElementById('monthlyBudget').value;
+
+      // Basic WCAG-compliant Form Validation
+      let isValid = true;
+
+      if (!fullName) {
+        nameError.style.display = 'block';
+        isValid = false;
+      } else {
+        nameError.style.display = 'none';
+      }
+
+      if (!preferredLocation || !monthlyBudget) {
+        isValid = false;
+      }
+
+      if (!isValid) {
+        errorAlert.style.display = 'block';
+        successAlert.style.display = 'none';
+        return;
+      }
+
+      // Save Data
+      const profileData = {
+        fullName,
+        preferredLocation,
+        monthlyBudget,
+        cleanliness: document.getElementById('cleanliness').value,
+        sleepSchedule: document.getElementById('sleepSchedule').value,
+        bio: document.getElementById('bio').value
+      };
+
+      localStorage.setItem('userProfile', JSON.stringify(profileData));
+
+      errorAlert.style.display = 'none';
+      successAlert.style.display = 'block';
+
+      setTimeout(() => {
+        successAlert.style.display = 'none';
+      }, 4000);
+    });
+  </script>
+</body>
+</html>

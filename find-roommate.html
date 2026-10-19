@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roommate Match - Find a Roommate</title>
+  <style>
+    :root {
+      --primary-color: #0056b3;
+      --secondary-color: #28a745;
+      --bg-color: #f8f9fa;
+      --text-color: #212529;
+      --card-bg: #ffffff;
+      --border-color: #dee2e6;
+      --danger-color: #dc3545;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; }
+
+    header { background-color: #ffffff; border-bottom: 2px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+    .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem; }
+    .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); text-decoration: none; }
+    .nav-links { display: flex; list-style: none; gap: 1.5rem; }
+    .nav-links a { text-decoration: none; color: var(--text-color); font-weight: 600; padding: 0.5rem; border-radius: 4px; }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary-color); background-color: #e9ecef; }
+
+    .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 280px 1fr; gap: 2rem; }
+
+    /* Filters Section */
+    .filter-section { background: var(--card-bg); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); height: fit-content; }
+    .filter-section h2 { font-size: 1.25rem; margin-bottom: 1rem; color: var(--primary-color); }
+    .filter-group { margin-bottom: 1.2rem; }
+    .filter-group label { display: block; font-weight: 600; margin-bottom: 0.4rem; font-size: 0.9rem; }
+    .filter-group select, .filter-group input { width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; }
+
+    /* Roommate Cards Grid */
+    .results-section h1 { font-size: 1.75rem; margin-bottom: 1rem; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+    .profile-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s; }
+    .profile-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .profile-card h3 { color: var(--primary-color); margin-bottom: 0.2rem; }
+    .profile-card .meta { font-size: 0.85rem; color: #6c757d; margin-bottom: 0.8rem; }
+    .profile-card ul { list-style: none; margin-bottom: 1rem; font-size: 0.9rem; }
+    .profile-card ul li { margin-bottom: 0.3rem; }
+    .badge { display: inline-block; background-color: #e2e3e5; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin-right: 0.3rem; margin-top: 0.3rem; }
+
+    .btn-action { background-color: var(--primary-color); color: white; border: none; padding: 0.6rem; border-radius: 4px; cursor: pointer; font-weight: 600; text-align: center; text-decoration: none; display: block; margin-top: 0.5rem; }
+    .btn-action:hover { background-color: #003d80; }
+
+    /* Modal */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000; }
+    .modal-content { background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; position: relative; }
+    .close-modal { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; border: none; background: none; }
+
+    footer { margin-top: auto; background-color: #343a40; color: white; text-align: center; padding: 1.5rem; font-size: 0.9rem; }
+
+    @media (max-width: 768px) {
+      .container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="index.html" class="logo">Roommate Match</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="find-roommate.html" class="active">Find a Roommate</a></li>
+        <li><a href="messages.html">Messages</a></li>
+        <li><a href="profile.html">My Profile</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Filter Sidebar -->
+    <aside class="filter-section" aria-label="Filter Options">
+      <h2>Filter Results</h2>
+      <form id="filterForm">
+        <div class="filter-group">
+          <label for="filterLocation">Location</label>
+          <select id="filterLocation">
+            <option value="all">All Locations</option>
+            <option value="North Campus">North Campus</option>
+            <option value="South Campus">South Campus</option>
+            <option value="Downtown">Downtown</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterBudget">Max Monthly Budget ($)</label>
+          <input type="number" id="filterBudget" placeholder="e.g. 800" step="50">
+        </div>
+        <div class="filter-group">
+          <label for="filterCleanliness">Cleanliness</label>
+          <select id="filterCleanliness">
+            <option value="all">Any Preference</option>
+            <option value="Very Neat">Very Neat</option>
+            <option value="Moderate">Moderate</option>
+          </select>
+        </div>
+        <button type="button" class="btn-action" id="resetFilters" style="background-color:#6c757d;">Reset Filters</button>
+      </form>
+    </aside>
+
+    <!-- Main Results Grid -->
+    <section class="results-section">
+      <h1>Potential Roommates</h1>
+      <div class="card-grid" id="cardGrid">
+        <!-- JS will populate cards dynamically -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Profile Details Modal -->
+  <div class="modal" id="profileModal" aria-hidden="true" role="dialog">
+    <div class="modal-content">
+      <button class="close-modal" id="closeModalBtn" aria-label="Close dialog">&times;</button>
+      <div id="modalBody">
+        <!-- Profile detail inserted here dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Roommate Match. Designed for Student Compatibility &amp; Usability.</p>
+  </footer>
+
+  <script>
+    // Sample Roommate Data
+    const roommates = [
+      { id: 1, name: "Alex Chen", age: 20, major: "Computer Science", location: "North Campus", budget: 700, cleanliness: "Very Neat", sleep: "Night Owl", bio: "Quiet student who loves gaming and coding. Keeps common areas tidy." },
+      { id: 2, name: "Sarah Jenkins", age: 21, major: "Biology", location: "Downtown", budget: 850, cleanliness: "Moderate", sleep: "Early Bird", bio: "Enjoys cooking and outdoor hiking. Looking for a friendly roommate." },
+      { id: 3, name: "Jordan Taylor", age: 19, major: "Business", location: "South Campus", budget: 600, cleanliness: "Very Neat", sleep: "Early Bird", bio: "Focused on studies during weekdays. Clean and organized." },
+      { id: 4, name: "Maya Patel", age: 22, major: "Art & Design", location: "North Campus", budget: 900, cleanliness: "Moderate", sleep: "Night Owl", bio: "Creative, respectful of personal space, and easygoing." }
+    ];
+
+    const cardGrid = document.getElementById('cardGrid');
+    const filterLocation = document.getElementById('filterLocation');
+    const filterBudget = document.getElementById('filterBudget');
+    const filterCleanliness = document.getElementById('filterCleanliness');
+    const resetFiltersBtn = document.getElementById('resetFilters');
+
+    const modal = document.getElementById('profileModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const modalBody = document.getElementById('modalBody');
+
+    // Render Profiles
+    function renderProfiles(data) {
+      cardGrid.innerHTML = '';
+      if (data.length === 0) {
+        cardGrid.innerHTML = '<p>No matching roommates found. Try adjusting your filters!</p>';
+        return;
+      }
+
+      data.forEach(person => {
+        const card = document.createElement('article');
+        card.className = 'profile-card';
+        card.innerHTML = `
+          <div>
+            <h3>${person.name} (${person.age})</h3>
+            <p class="meta">${person.major}</p>
+            <ul>
+              <li><strong>Location:</strong> ${person.location}</li>
+              <li><strong>Max Budget:</strong> $${person.budget}/mo</li>
+              <li><strong>Cleanliness:</strong> ${person.cleanliness}</li>
+            </ul>
+            <span class="badge">${person.sleep}</span>
+          </div>
+          <div>
+            <button class="btn-action" onclick="openProfileModal(${person.id})">View Full Profile</button>
+            <a href="messages.html?user=${encodeURIComponent(person.name)}" class="btn-action" style="background-color: var(--secondary-color); text-align:center;">Message</a>
+          </div>
+        `;
+        cardGrid.appendChild(card);
+      });
+    }
+
+    // Filter Logic
+    function applyFilters() {
+      const loc = filterLocation.value;
+      const budget = parseFloat(filterBudget.value) || Infinity;
+      const clean = filterCleanliness.value;
+
+      const filtered = roommates.filter(item => {
+        const matchesLoc = loc === 'all' || item.location === loc;
+        const matchesBudget = item.budget <= budget;
+        const matchesClean = clean === 'all' || item.cleanliness === clean;
+        return matchesLoc && matchesBudget && matchesClean;
+      });
+
+      renderProfiles(filtered);
+    }
+
+    // Modal Control
+    window.openProfileModal = function(id) {
+      const person = roommates.find(p => p.id === id);
+      if(!person) return;
+
+      modalBody.innerHTML = `
+        <h2 style="color:var(--primary-color);">${person.name}</h2>
+        <p><strong>Major:</strong> ${person.major} (Age: ${person.age})</p>
+        <hr style="margin: 1rem 0; border: 0; border-top: 1px solid #ccc;">
+        <p><strong>Preferred Location:</strong> ${person.location}</p>
+        <p><strong>Max Budget:</strong> $${person.budget} / month</p>
+        <p><strong>Cleanliness Habits:</strong> ${person.cleanliness}</p>
+        <p><strong>Sleep Schedule:</strong> ${person.sleep}</p>
+        <p style="margin-top:1rem;"><strong>About Me:</strong> ${person.bio}</p>
+        <div style="margin-top: 1.5rem; display:flex; gap:0.5rem;">
+          <a href="messages.html?user=${encodeURIComponent(person.name)}" class="btn-action" style="background-color:var(--secondary-color); flex:1; text-align:center;">Start Conversation</a>
+          <button onclick="reportUser('${person.name}')" class="btn-action" style="background-color:var(--danger-color);">Report User</button>
+        </div>
+      `;
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden', 'false');
+    };
+
+    window.reportUser = function(userName) {
+      alert(`Thank you. User ${userName} has been flagged for review by moderators.`);
+      modal.style.display = 'none';
+    };
+
+    closeModalBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+    });
+
+    // Events
+    filterLocation.addEventListener('change', applyFilters);
+    filterBudget.addEventListener('input', applyFilters);
+    filterCleanliness.addEventListener('change', applyFilters);
+
+    resetFiltersBtn.addEventListener('click', () => {
+      filterLocation.value = 'all';
+      filterBudget.value = '';
+      filterCleanliness.value = 'all';
+      renderProfiles(roommates);
+    });
+
+    // Initial Load
+    document.addEventListener('DOMContentLoaded', () => renderProfiles(roommates));
+  </script>
+</body>
+</html>

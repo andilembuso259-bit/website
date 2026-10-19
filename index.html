@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roommate Match - Find Your Ideal Student Roommate</title>
+  <style>
+    /* CSS Styles */
+    :root {
+      --primary-color: #0056b3;
+      --primary-hover: #003d80;
+      --secondary-color: #28a745;
+      --bg-color: #f8f9fa;
+      --text-color: #212529;
+      --card-bg: #ffffff;
+      --border-color: #dee2e6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Navigation */
+    header {
+      background-color: #ffffff;
+      border-bottom: 2px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 600;
+      padding: 0.5rem;
+      border-radius: 4px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary-color);
+      background-color: #e9ecef;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--primary-color), #003366);
+      color: white;
+      text-align: center;
+      padding: 4rem 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #218838;
+    }
+
+    /* Features Section */
+    .features {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .feature-card h2 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: auto;
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="index.html" class="logo">Roommate Match</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="find-roommate.html">Find a Roommate</a></li>
+        <li><a href="messages.html">Messages</a></li>
+        <li><a href="profile.html">My Profile</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Find Your Perfect Student Roommate</h1>
+      <p>Connect with university students who share your budget, lifestyle, and study habits in a safe, stress-free environment.</p>
+      <a href="find-roommate.html" class="btn" id="heroCtaBtn">Browse Potential Matches</a>
+    </section>
+
+    <section class="features" aria-label="Website Features">
+      <article class="feature-card">
+        <h2>Tailored Matching</h2>
+        <p>Specify your budget, preferred location, cleanliness preferences, and study routines to find compatible roommates.</p>
+      </article>
+      <article class="feature-card">
+        <h2>In-App Messaging</h2>
+        <p>Safely chat with prospective roommates to ask questions and discuss accommodation before making decisions.</p>
+      </article>
+      <article class="feature-card">
+        <h2>Safety Controls</h2>
+        <p>Enjoy peace of mind with user validation, built-in blocking, and reporting safety features.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Roommate Match. Designed for Student Compatibility &amp; Usability.</p>
+  </footer>
+
+  <script>
+    // JavaScript Functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Roommate Match Home Page Loaded Successfully.');
+      
+      const ctaBtn = document.getElementById('heroCtaBtn');
+      ctaBtn.addEventListener('click', (e) => {
+        // Analytics or click tracking can be hooked here
+        console.log('User clicked Browse Matches CTA');
+      });
+    });
+  </script>
+</body>
+</html>
